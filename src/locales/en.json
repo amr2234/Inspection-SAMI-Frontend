@@ -1,0 +1,43 @@
+{
+  "nav": {
+    "dashboard": "Dashboard",
+    "tables": "Tables",
+    "billing": "Billing",
+    "profile": "Profile",
+    "signin": "Sign In",
+    "signup": "Sign Up",
+    "accountPages": "ACCOUNT PAGES"
+  },
+  "auth": {
+    "welcomeBack": "Welcome Back",
+    "enterCredentials": "Enter your email and password to sign in",
+    "email": "Email",
+    "password": "Password",
+    "emailPlaceholder": "Your email address",
+    "passwordPlaceholder": "Your password",
+    "rememberMe": "Remember me",
+    "signIn": "SIGN IN",
+    "signUp": "SIGN UP",
+    "dontHaveAccount": "Don't have an account?",
+    "alreadyHaveAccount": "Already have an account?",
+    "niceToMeetYou": "Nice to meet you!",
+    "enterDetailsToRegister": "Just last step and you become part of our community"
+  },
+  "dashboard": {
+    "welcome": "Welcome",
+    "overview": "Overview",
+    "statistics": "Statistics",
+    "recentActivity": "Recent Activity"
+  },
+  "common": {
+    "search": "Search",
+    "notifications": "Notifications",
+    "settings": "Settings",
+    "logout": "Logout",
+    "save": "Save",
+    "cancel": "Cancel",
+    "edit": "Edit",
+    "delete": "Delete",
+    "submit": "Submit"
+  }
+}

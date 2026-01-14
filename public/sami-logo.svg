@@ -1,0 +1,16 @@
+<svg width="320" height="95" viewBox="0 0 320 95" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Letter S -->
+  <path d="M0 71.5L23.5 59.5L83 34L83 48L28 73L80.5 94.5L23.5 94.5L0 83.5L0 71.5Z" fill="#214C59"/>
+  
+  <!-- Letter A - Left stroke -->
+  <path d="M107 34L130 94.5L145 94.5L168 34L152 34L138 78L124 34L107 34Z" fill="#214C59"/>
+  
+  <!-- Letter A - Triangle accent (green) -->
+  <path d="M123.5 0L108 34L138.5 34L123.5 0Z" fill="#62AD45"/>
+  
+  <!-- Letter M -->
+  <path d="M191 34L191 94.5L206 94.5L206 52L222 94.5L237 94.5L253 52L253 94.5L268 94.5L268 34L245 34L229.5 76L214 34L191 34Z" fill="#214C59"/>
+  
+  <!-- Letter I -->
+  <path d="M307 34L291 34L291 94.5L307 94.5L307 34Z" fill="#214C59"/>
+</svg>

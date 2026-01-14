@@ -1,0 +1,59 @@
+{
+  "nav": {
+    "dashboard": "لوحة التحكم",
+    "tables": "الجداول",
+    "billing": "الفواتير",
+    "profile": "الملف الشخصي",
+    "signin": "تسجيل الدخول",
+    "signup": "إنشاء حساب",
+    "accountPages": "صفحات الحساب"
+  },
+  "auth": {
+    "welcomeBack": "مرحباً بعودتك",
+    "enterCredentials": "أدخل بريدك الإلكتروني وكلمة المرور لتسجيل الدخول",
+    "email": "البريد الإلكتروني",
+    "password": "كلمة المرور",
+    "emailPlaceholder": "عنوان بريدك الإلكتروني",
+    "passwordPlaceholder": "كلمة المرور الخاصة بك",
+    "rememberMe": "تذكرني",
+    "signIn": "تسجيل الدخول",
+    "signUp": "إنشاء حساب",
+    "dontHaveAccount": "ليس لديك حساب؟",
+    "alreadyHaveAccount": "لديك حساب بالفعل؟",
+    "niceToMeetYou": "سعداء بلقائك!",
+    "enterDetailsToRegister": "خطوة أخيرة وستصبح جزءاً من مجتمعنا"
+  },
+  "dashboard": {
+    "welcome": "مرحباً",
+    "overview": "نظرة عامة",
+    "statistics": "الإحصائيات",
+    "recentActivity": "النشاط الأخير",
+    "salesToday": "مبيعات اليوم",
+    "todaysUsers": "مستخدمو اليوم",
+    "newMembers": "أعضاء جدد",
+    "totalOrders": "إجمالي الطلبات",
+    "totalRevenue": "إجمالي الإيرادات",
+    "totalVisits": "إجمالي الزيارات",
+    "activeUsers": "المستخدمون النشطون",
+    "satisfactionRate": "معدل الرضا",
+    "salesOverview": "نظرة عامة على المبيعات",
+    "visitorsChart": "مخطط الزوار",
+    "organizationsList": "قائمة المنظمات",
+    "organizations": "المنظمات",
+    "members": "الأعضاء",
+    "budget": "الميزانية",
+    "completion": "الإنجاز",
+    "ordersOverview": "نظرة عامة على الطلبات"
+  },
+  "common": {
+    "search": "بحث",
+    "notifications": "الإشعارات",
+    "settings": "الإعدادات",
+    "logout": "تسجيل الخروج",
+    "save": "حفظ",
+    "cancel": "إلغاء",
+    "edit": "تعديل",
+    "delete": "حذف",
+    "submit": "إرسال"
+  }
+}
