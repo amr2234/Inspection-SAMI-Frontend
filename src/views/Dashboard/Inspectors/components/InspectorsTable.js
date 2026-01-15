@@ -42,12 +42,6 @@ const InspectorsTable = React.memo(({ inspectors, onRefresh }) => {
     );
   };
 
-  const getComplianceColor = (rate) => {
-    if (rate >= 80) return 'green';
-    if (rate >= 60) return 'orange';
-    return 'red';
-  };
-
   const handleView = useCallback((inspectorId) => {
     history.push(`/admin/inspectors-list/${inspectorId}`);
   }, [history]);
@@ -81,13 +75,9 @@ const InspectorsTable = React.memo(({ inspectors, onRefresh }) => {
         <Tr>
           <Th textAlign="right" borderColor={borderColor}>رقم المفتش</Th>
           <Th textAlign="right" borderColor={borderColor}>الاسم</Th>
-          <Th textAlign="right" borderColor={borderColor}>المسمى الوظيفي</Th>
-          <Th textAlign="right" borderColor={borderColor}>التخصص</Th>
           <Th textAlign="right" borderColor={borderColor}>المنطقة</Th>
           <Th textAlign="center" borderColor={borderColor}>الزيارات</Th>
-          <Th textAlign="center" borderColor={borderColor}>نسبة الالتزام</Th>
           <Th textAlign="center" borderColor={borderColor}>الحالة</Th>
-          <Th textAlign="center" borderColor={borderColor}>نشط</Th>
           <Th textAlign="center" borderColor={borderColor}>الإجراءات</Th>
         </Tr>
       </Thead>
@@ -112,19 +102,6 @@ const InspectorsTable = React.memo(({ inspectors, onRefresh }) => {
             </Td>
             <Td textAlign="right" borderColor={borderColor}>
               <Text fontSize="sm" color={textColor}>
-                {inspector.title}
-              </Text>
-              <Text fontSize="xs" color="gray.500">
-                {inspector.department}
-              </Text>
-            </Td>
-            <Td textAlign="right" borderColor={borderColor}>
-              <Badge colorScheme="blue" fontSize="sm">
-                {inspector.specialization}
-              </Badge>
-            </Td>
-            <Td textAlign="right" borderColor={borderColor}>
-              <Text fontSize="sm" color={textColor}>
                 {inspector.region}
               </Text>
               <Text fontSize="xs" color="gray.500">
@@ -140,24 +117,7 @@ const InspectorsTable = React.memo(({ inspectors, onRefresh }) => {
               </Text>
             </Td>
             <Td textAlign="center" borderColor={borderColor}>
-              <Badge
-                colorScheme={getComplianceColor(inspector.complianceRate)}
-                fontSize="sm"
-                p="2px 8px"
-              >
-                {inspector.complianceRate}%
-              </Badge>
-            </Td>
-            <Td textAlign="center" borderColor={borderColor}>
               {getStatusBadge(inspector.isActive)}
-            </Td>
-            <Td textAlign="center" borderColor={borderColor}>
-              <Switch
-                isChecked={inspector.isActive}
-                onChange={() => handleToggleActive(inspector)}
-                colorScheme="green"
-                isDisabled={loading === inspector.id}
-              />
             </Td>
             <Td textAlign="center" borderColor={borderColor}>
               <HStack spacing={1} justify="center">

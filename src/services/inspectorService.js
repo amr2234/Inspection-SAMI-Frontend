@@ -7,7 +7,7 @@ const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 // Mock inspectors data
 const mockInspectors = [
   {
-    id: 'INS001',
+    id: '1',
     name: 'أحمد محمد السعيد',
     employeeId: 'EMP-2024-001',
     nationalId: '1234567890',

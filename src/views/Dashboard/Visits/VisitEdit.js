@@ -4,16 +4,12 @@ import {
   Box,
   Text,
   Button,
-  FormControl,
-  FormLabel,
-  Input,
-  Select,
-  Textarea,
   SimpleGrid,
   useColorModeValue,
   Spinner,
   Center,
   HStack,
+  VStack,
   useToast,
 } from '@chakra-ui/react';
 import { useParams, useHistory } from 'react-router-dom';
@@ -21,21 +17,38 @@ import { ArrowBackIcon } from '@chakra-ui/icons';
 import Card from 'components/Card/Card';
 import CardBody from 'components/Card/CardBody';
 import CardHeader from 'components/Card/CardHeader';
+import { FormField } from 'components/FormField';
 import visitService from 'services/visitService';
 
 export default function VisitEdit() {
   const { id } = useParams();
   const history = useHistory();
   const toast = useToast();
-  const [visit, setVisit] = useState(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [formData, setFormData] = useState({});
+  
+  // Form state
+  const [formData, setFormData] = useState({
+    violationType: '',
+    establishmentName: '',
+    establishmentCode: '',
+    branch: '',
+    establishmentType: '',
+    activityType: '',
+    activityCategory: '',
+    region: '',
+    city: '',
+    establishmentStatus: '',
+    dataUpdated: '',
+    complianceStatus: '',
+    visitCategory: '',
+    addedToDatabase: '',
+    sector: '',
+    visitDateTime: '',
+  });
 
   const textColor = useColorModeValue('gray.700', 'white');
   const bgColor = useColorModeValue('white', 'gray.700');
-  const borderColor = useColorModeValue('gray.200', 'gray.600');
-  const currentUserRole = 'Inspector'; // Mock - replace with actual auth context
 
   useEffect(() => {
     fetchVisitDetails();
@@ -45,34 +58,24 @@ export default function VisitEdit() {
     setLoading(true);
     try {
       const data = await visitService.getVisitById(id);
-      
-      // Check if user can edit
-      if (currentUserRole !== 'SystemAdmin' && (!data.canEdit || data.isArchived)) {
-        toast({
-          title: 'غير مصرح',
-          description: 'ليس لديك صلاحية لتعديل هذه الزيارة',
-          status: 'error',
-          duration: 5000,
-        });
-        history.push(`/admin/visits/${id}`);
-        return;
-      }
-
-      setVisit(data);
+      // Map API data to form data
       setFormData({
-        dateTime: data.dateTime.slice(0, 16), // Format for datetime-local input
-        establishmentName: data.establishmentName,
-        establishmentCode: data.establishmentCode,
-        branch: data.branch,
-        region: data.region,
-        city: data.city,
-        sector: data.sector,
-        visitType: data.visitType,
-        complianceStatus: data.complianceStatus,
-        violationsCount: data.violationsCount,
-        samplesCount: data.samplesCount,
-        finesTotal: data.finesTotal,
-        notes: data.notes || '',
+        violationType: data.violationType || '',
+        establishmentName: data.establishmentName || '',
+        establishmentCode: data.establishmentCode || '',
+        branch: data.branch || '',
+        establishmentType: data.establishmentType || '',
+        activityType: data.activityType || '',
+        activityCategory: data.activityCategory || '',
+        region: data.region || '',
+        city: data.city || '',
+        establishmentStatus: data.establishmentStatus || '',
+        dataUpdated: data.dataUpdated || '',
+        complianceStatus: data.complianceStatus || '',
+        visitCategory: data.visitCategory || '',
+        addedToDatabase: data.addedToDatabase || '',
+        sector: data.sector || '',
+        visitDateTime: data.dateTime?.slice(0, 16) || '',
       });
     } catch (error) {
       toast({
@@ -87,7 +90,7 @@ export default function VisitEdit() {
     }
   };
 
-  const handleChange = (field, value) => {
+  const updateFormData = (field, value) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
@@ -128,16 +131,6 @@ export default function VisitEdit() {
     );
   }
 
-  if (!visit) {
-    return (
-      <Flex flexDirection="column" pt={{ base: '120px', md: '75px' }} w="100%">
-        <Center py={20}>
-          <Text color="gray.500">الزيارة غير موجودة</Text>
-        </Center>
-      </Flex>
-    );
-  }
-
   return (
     <Flex flexDirection="column" pt={{ base: '120px', md: '75px' }} w="100%">
       {/* Header */}
@@ -147,208 +140,207 @@ export default function VisitEdit() {
             leftIcon={<ArrowBackIcon />}
             variant="ghost"
             onClick={handleCancel}
+            isDisabled={saving}
           >
             العودة
           </Button>
-          <Text fontSize="2xl" fontWeight="bold" color={textColor}>
-            تعديل الزيارة - {visit.id}
-          </Text>
+          <Box>
+            <Text fontSize="2xl" fontWeight="bold" color={textColor}>
+              تعديل الزيارة التفتيشية
+            </Text>
+            <Text fontSize="sm" color="gray.500">
+              رقم الزيارة: {id}
+            </Text>
+          </Box>
+        </HStack>
+        <HStack spacing={3}>
+          <Button variant="outline" onClick={handleCancel} isDisabled={saving}>
+            إلغاء
+          </Button>
+          <Button
+            bg="#224D59"
+            color="white"
+            _hover={{ bg: '#1a3d47' }}
+            onClick={handleSubmit}
+            isLoading={saving}
+            loadingText="جاري الحفظ..."
+          >
+            حفظ التغييرات
+          </Button>
         </HStack>
       </Flex>
 
-      {/* Edit Form */}
-      <Card mb="24px" w="100%">
-        <CardHeader>
-          <Text fontSize="lg" fontWeight="bold">معلومات الزيارة</Text>
-        </CardHeader>
-        <CardBody>
-          <SimpleGrid columns={{ base: 1, md: 2 }} spacing={6}>
-            {/* Date and Time */}
-            <FormControl isRequired>
-              <FormLabel>تاريخ ووقت الزيارة</FormLabel>
-              <Input
-                type="datetime-local"
-                value={formData.dateTime}
-                onChange={(e) => handleChange('dateTime', e.target.value)}
-                bg={bgColor}
-                borderColor={borderColor}
+      <VStack spacing={6} align="stretch" w="100%">
+        {/* معلومات الزيارة التفتيشية */}
+        <Card>
+          <CardHeader p="20px">
+            <Text fontSize="lg" fontWeight="bold" color={textColor}>
+              معلومات الزيارة التفتيشية
+            </Text>
+          </CardHeader>
+          <CardBody px={6} py={5}>
+            <SimpleGrid columns={{ base: 1, md: 2 }} spacing={6}>
+              <FormField
+                label="نوع المخالفة"
+                name="violationType"
+                value={formData.violationType}
+                onChange={(value) => updateFormData('violationType', value)}
+                type="select"
+                options={['مخالفة إدارية', 'مخالفة فنية', 'مخالفة بيئية']}
+                required
               />
-            </FormControl>
-
-            {/* Establishment Name */}
-            <FormControl isRequired>
-              <FormLabel>اسم المنشأة</FormLabel>
-              <Input
+              
+              <FormField
+                label="اسم المنشأة"
+                name="establishmentName"
                 value={formData.establishmentName}
-                onChange={(e) => handleChange('establishmentName', e.target.value)}
-                bg={bgColor}
-                borderColor={borderColor}
-                dir="rtl"
+                onChange={(value) => updateFormData('establishmentName', value)}
+                type="text"
+                required
               />
-            </FormControl>
-
-            {/* Establishment Code */}
-            <FormControl isRequired>
-              <FormLabel>كود المنشأة</FormLabel>
-              <Input
+              
+              <FormField
+                label="كود المنشأة"
+                name="establishmentCode"
                 value={formData.establishmentCode}
-                onChange={(e) => handleChange('establishmentCode', e.target.value)}
-                bg={bgColor}
-                borderColor={borderColor}
+                onChange={(value) => updateFormData('establishmentCode', value)}
+                type="select"
+                options={['F-001', 'F-002', 'F-003', 'F-004', 'F-005']}
+                required
               />
-            </FormControl>
-
-            {/* Branch */}
-            <FormControl isRequired>
-              <FormLabel>الفرع</FormLabel>
-              <Input
+              
+              <FormField
+                label="الفرع"
+                name="branch"
                 value={formData.branch}
-                onChange={(e) => handleChange('branch', e.target.value)}
-                bg={bgColor}
-                borderColor={borderColor}
-                dir="rtl"
+                onChange={(value) => updateFormData('branch', value)}
+                type="select"
+                options={['الفرع الرئيسي', 'الفرع الشمالي', 'الفرع الجنوبي', 'الفرع الشرقي', 'الفرع الغربي']}
+                required
               />
-            </FormControl>
-
-            {/* Region */}
-            <FormControl isRequired>
-              <FormLabel>المنطقة</FormLabel>
-              <Input
+              
+              <FormField
+                label="نوع المنشأة"
+                name="establishmentType"
+                value={formData.establishmentType}
+                onChange={(value) => updateFormData('establishmentType', value)}
+                type="select"
+                options={['مصنع', 'مستودع', 'محل تجاري', 'مكتب', 'ورشة']}
+                required
+              />
+              
+              <FormField
+                label="نوع النشاط"
+                name="activityType"
+                value={formData.activityType}
+                onChange={(value) => updateFormData('activityType', value)}
+                type="select"
+                options={['صناعي', 'تجاري', 'خدمي', 'زراعي', 'صحي']}
+                required
+              />
+              
+              <FormField
+                label="فئة النشاط"
+                name="activityCategory"
+                value={formData.activityCategory}
+                onChange={(value) => updateFormData('activityCategory', value)}
+                type="select"
+                options={['الفئة الأولى', 'الفئة الثانية', 'الفئة الثالثة', 'الفئة الرابعة']}
+                required
+              />
+              
+              <FormField
+                label="المنطقة"
+                name="region"
                 value={formData.region}
-                onChange={(e) => handleChange('region', e.target.value)}
-                bg={bgColor}
-                borderColor={borderColor}
-                dir="rtl"
+                onChange={(value) => updateFormData('region', value)}
+                type="select"
+                options={['الرياض', 'مكة المكرمة', 'المدينة المنورة', 'الشرقية', 'عسير', 'جازان', 'تبوك']}
+                required
               />
-            </FormControl>
-
-            {/* City */}
-            <FormControl isRequired>
-              <FormLabel>المدينة</FormLabel>
-              <Input
+              
+              <FormField
+                label="المدينة"
+                name="city"
                 value={formData.city}
-                onChange={(e) => handleChange('city', e.target.value)}
-                bg={bgColor}
-                borderColor={borderColor}
-                dir="rtl"
+                onChange={(value) => updateFormData('city', value)}
+                type="select"
+                options={['الرياض', 'جدة', 'مكة', 'المدينة', 'الدمام', 'أبها', 'تبوك']}
+                required
               />
-            </FormControl>
-
-            {/* Sector */}
-            <FormControl isRequired>
-              <FormLabel>القطاع</FormLabel>
-              <Input
-                value={formData.sector}
-                onChange={(e) => handleChange('sector', e.target.value)}
-                bg={bgColor}
-                borderColor={borderColor}
-                dir="rtl"
+              
+              <FormField
+                label="حالة المنشأة"
+                name="establishmentStatus"
+                value={formData.establishmentStatus}
+                onChange={(value) => updateFormData('establishmentStatus', value)}
+                type="select"
+                options={['نشطة', 'متوقفة مؤقتاً', 'متوقفة نهائياً', 'تحت الإنشاء']}
+                required
               />
-            </FormControl>
-
-            {/* Visit Type */}
-            <FormControl isRequired>
-              <FormLabel>نوع الزيارة</FormLabel>
-              <Input
-                value={formData.visitType}
-                onChange={(e) => handleChange('visitType', e.target.value)}
-                bg={bgColor}
-                borderColor={borderColor}
-                dir="rtl"
+              
+              <FormField
+                label="هل تم تحديث بيانات المنشأة؟"
+                name="dataUpdated"
+                value={formData.dataUpdated}
+                onChange={(value) => updateFormData('dataUpdated', value)}
+                type="select"
+                options={['نعم', 'لا']}
+                required
               />
-            </FormControl>
-
-            {/* Compliance Status */}
-            <FormControl isRequired>
-              <FormLabel>حالة الامتثال</FormLabel>
-              <Select
+              
+              <FormField
+                label="حالة الالتزام"
+                name="complianceStatus"
                 value={formData.complianceStatus}
-                onChange={(e) => handleChange('complianceStatus', e.target.value)}
-                bg={bgColor}
-                borderColor={borderColor}
-              >
-                <option value="Compliant">متوافق</option>
-                <option value="NonCompliant">غير متوافق</option>
-                <option value="UnderReview">قيد المراجعة</option>
-              </Select>
-            </FormControl>
-
-            {/* Violations Count */}
-            <FormControl isRequired>
-              <FormLabel>عدد المخالفات</FormLabel>
-              <Input
-                type="number"
-                min="0"
-                value={formData.violationsCount}
-                onChange={(e) => handleChange('violationsCount', parseInt(e.target.value) || 0)}
-                bg={bgColor}
-                borderColor={borderColor}
+                onChange={(value) => updateFormData('complianceStatus', value)}
+                type="select"
+                options={['ملتزم', 'غير ملتزم', 'ملتزم جزئياً']}
+                required
               />
-            </FormControl>
-
-            {/* Samples Count */}
-            <FormControl isRequired>
-              <FormLabel>عدد العينات</FormLabel>
-              <Input
-                type="number"
-                min="0"
-                value={formData.samplesCount}
-                onChange={(e) => handleChange('samplesCount', parseInt(e.target.value) || 0)}
-                bg={bgColor}
-                borderColor={borderColor}
+              
+              <FormField
+                label="نوع الزيارة (مجدولة / معاودة / بلاغ)"
+                name="visitCategory"
+                value={formData.visitCategory}
+                onChange={(value) => updateFormData('visitCategory', value)}
+                type="select"
+                options={['مجدولة', 'معاودة', 'بلاغ']}
+                required
               />
-            </FormControl>
-
-            {/* Fines Total */}
-            <FormControl isRequired>
-              <FormLabel>إجمالي الغرامات (ريال)</FormLabel>
-              <Input
-                type="number"
-                min="0"
-                value={formData.finesTotal}
-                onChange={(e) => handleChange('finesTotal', parseFloat(e.target.value) || 0)}
-                bg={bgColor}
-                borderColor={borderColor}
+              
+              <FormField
+                label="هل قمت بإضافة المنشأة لقاعدة البيانات؟"
+                name="addedToDatabase"
+                value={formData.addedToDatabase}
+                onChange={(value) => updateFormData('addedToDatabase', value)}
+                type="select"
+                options={['نعم', 'لا']}
+                required
               />
-            </FormControl>
-          </SimpleGrid>
-
-          {/* Notes */}
-          <FormControl mt={6}>
-            <FormLabel>ملاحظات</FormLabel>
-            <Textarea
-              value={formData.notes}
-              onChange={(e) => handleChange('notes', e.target.value)}
-              bg={bgColor}
-              borderColor={borderColor}
-              dir="rtl"
-              rows={4}
-              placeholder="أضف ملاحظات إضافية..."
-            />
-          </FormControl>
-
-          {/* Action Buttons */}
-          <Flex mt={8} gap={4} justify="flex-end">
-            <Button
-              variant="outline"
-              onClick={handleCancel}
-              isDisabled={saving}
-            >
-              إلغاء
-            </Button>
-            <Button
-              bg="#224D59"
-              color="white"
-              _hover={{ bg: '#1a3d47' }}
-              onClick={handleSubmit}
-              isLoading={saving}
-              loadingText="جاري الحفظ..."
-            >
-              حفظ التغييرات
-            </Button>
-          </Flex>
-        </CardBody>
-      </Card>
+              
+              <FormField
+                label="القطاع"
+                name="sector"
+                value={formData.sector}
+                onChange={(value) => updateFormData('sector', value)}
+                type="select"
+                options={['القطاع الحكومي', 'القطاع الخاص', 'القطاع المختلط']}
+                required
+              />
+              
+              <FormField
+                label="تاريخ ووقت الزيارة"
+                name="visitDateTime"
+                value={formData.visitDateTime}
+                onChange={(value) => updateFormData('visitDateTime', value)}
+                type="datetime-local"
+                required
+              />
+            </SimpleGrid>
+          </CardBody>
+        </Card>
+      </VStack>
     </Flex>
   );
 }

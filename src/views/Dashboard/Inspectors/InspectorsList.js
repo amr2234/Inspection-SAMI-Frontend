@@ -117,7 +117,7 @@ export default function InspectorsList() {
         <CardBody overflowX="auto" pb={0}>
           {loading ? (
             <Box minH="400px" py={4}>
-              <TableSkeleton rows={pageSize} columns={10} />
+              <TableSkeleton rows={pageSize} columns={6} />
             </Box>
           ) : inspectors.length > 0 ? (
             <InspectorsTable inspectors={inspectors} onRefresh={fetchInspectors} />

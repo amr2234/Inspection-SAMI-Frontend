@@ -178,4 +178,28 @@
     font-weight: var(--font-weight-normal);
     line-height: 1.5;
   }
+
+  /* Hide dropdown arrow icon - Chakra */
+  .chakra-select__icon-wrapper {
+    display: none !important;
+  }
+
+  /* Hide native select arrows - all browsers */
+  select.chakra-select,
+  select[class*="chakra-select"],
+  select[class*="css-"],
+  select {
+    appearance: none !important;
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    background-image: none !important;
+    padding-inline-end: 0.75rem !important;
+  }
+
+  /* Remove padding since no arrow */
+  .chakra-select option,
+  select option {
+    padding-inline-end: 0.75rem !important;
+    padding-inline-start: 0.75rem !important;
+  }
 }

@@ -31,7 +31,8 @@ export function SearchBar(props) {
           <IconButton
             bg="inherit"
             borderRadius="inherit"
-            _hover="none"
+            padding="0.5rem"
+            _hover={{ bg: "inherit", borderColor: "transparent" }}
             _active={{
               bg: "inherit",
               transform: "none",

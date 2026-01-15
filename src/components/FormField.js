@@ -3,10 +3,11 @@ import {
   FormControl,
   FormLabel,
   Input,
-  Select,
   Box,
+  Text,
   useColorModeValue,
 } from '@chakra-ui/react';
+import { SearchableSelect } from './SearchableSelect';
 
 export function FormField({
   label,
@@ -17,7 +18,10 @@ export function FormField({
   options = [],
   required = false,
   disabled = false,
-  placeholder = ''
+  placeholder = '',
+  size = 'lg',
+  error = false,
+  errorMessage = ''
 }) {
   const borderColor = useColorModeValue('gray.300', 'gray.600');
   const focusBorderColor = useColorModeValue('#224D59', 'teal.400');
@@ -26,68 +30,51 @@ export function FormField({
   const disabledBgColor = useColorModeValue('gray.50', 'gray.700');
   const labelColor = useColorModeValue('gray.700', 'gray.200');
   const placeholderColor = useColorModeValue('gray.400', 'gray.500');
+  const errorBorderColor = useColorModeValue('red.500', 'red.400');
+  const errorBgColor = useColorModeValue('red.50', 'red.900');
   
   return (
-    <FormControl isRequired={required} isDisabled={disabled} mb={6}>
+    <FormControl isRequired={required} isDisabled={disabled} isInvalid={error} mb={6}>
       <FormLabel 
         htmlFor={name} 
         fontSize="sm" 
         fontWeight="600" 
-        color={labelColor}
+        color={error ? 'red.500' : labelColor}
         mb={2}
         display="flex"
         alignItems="center"
       >
         {label}
+        {error && errorMessage && (
+          <Text as="span" fontSize="xs" color="red.500" mr={2} fontWeight="normal">
+            ({errorMessage})
+          </Text>
+        )}
       </FormLabel>
       {type === 'select' ? (
-        <Select
-          id={name}
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-          placeholder={placeholder || `اختر ${label}`}
-          size="lg"
+        <Box
           borderRadius="10px"
-          borderWidth="2px"
-          borderColor={borderColor}
-          bg={disabled ? disabledBgColor : bgColor}
-          color={labelColor}
-          fontWeight="500"
-          transition="all 0.2s"
-          dir="rtl"
-          textAlign="right"
-          paddingLeft="16px"
-          paddingRight="16px"
-          icon={<Box />}
-          _hover={{
-            borderColor: disabled ? borderColor : hoverBorderColor,
-            boxShadow: disabled ? 'none' : '0 0 0 1px rgba(34, 77, 89, 0.1)',
-          }}
-          _focus={{
-            borderColor: focusBorderColor,
-            boxShadow: `0 0 0 3px rgba(34, 77, 89, 0.1)`,
-            outline: 'none',
-          }}
-          _placeholder={{
-            color: placeholderColor,
-            fontWeight: '400',
-          }}
+          borderWidth={error ? "3px" : "0px"}
+          borderColor={error ? errorBorderColor : "transparent"}
+          bg={error ? errorBgColor : "transparent"}
+          animation={error ? "shake 0.3s" : "none"}
           sx={{
-            '& option': {
-              bg: bgColor,
-              color: labelColor,
-              padding: '8px',
-              direction: 'rtl',
-              textAlign: 'right',
+            '@keyframes shake': {
+              '0%, 100%': { transform: 'translateX(0)' },
+              '25%': { transform: 'translateX(-5px)' },
+              '75%': { transform: 'translateX(5px)' },
             },
           }}
         >
-          {options.map((option, index) => (
-            <option key={index} value={option}>
-              {option}
-            </option>
-          ))}
-        </Select>
+          <SearchableSelect
+            value={value}
+            onChange={onChange}
+            options={options}
+            placeholder={placeholder || `اختر ${label}`}
+            isDisabled={disabled}
+            size={size}
+          />
+        </Box>
       ) : (
         <Input
           id={name}
@@ -98,18 +85,26 @@ export function FormField({
           size="lg"
           borderRadius="10px"
           borderWidth="2px"
-          borderColor={borderColor}
-          bg={disabled ? disabledBgColor : bgColor}
+          borderColor={error ? errorBorderColor : borderColor}
+          bg={error ? errorBgColor : (disabled ? disabledBgColor : bgColor)}
           color={labelColor}
           fontWeight="500"
           transition="all 0.2s"
+          animation={error ? "shake 0.3s" : "none"}
+          sx={{
+            '@keyframes shake': {
+              '0%, 100%': { transform: 'translateX(0)' },
+              '25%': { transform: 'translateX(-5px)' },
+              '75%': { transform: 'translateX(5px)' },
+            },
+          }}
           _hover={{
-            borderColor: disabled ? borderColor : hoverBorderColor,
-            boxShadow: disabled ? 'none' : '0 0 0 1px rgba(34, 77, 89, 0.1)',
+            borderColor: error ? errorBorderColor : (disabled ? borderColor : hoverBorderColor),
+            boxShadow: disabled ? 'none' : (error ? '0 0 0 1px rgba(245, 101, 101, 0.3)' : '0 0 0 1px rgba(34, 77, 89, 0.1)'),
           }}
           _focus={{
-            borderColor: focusBorderColor,
-            boxShadow: `0 0 0 3px rgba(34, 77, 89, 0.1)`,
+            borderColor: error ? errorBorderColor : focusBorderColor,
+            boxShadow: error ? `0 0 0 3px rgba(245, 101, 101, 0.2)` : `0 0 0 3px rgba(34, 77, 89, 0.1)`,
             outline: 'none',
           }}
           _placeholder={{

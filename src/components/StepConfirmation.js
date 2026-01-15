@@ -3,6 +3,8 @@ import { Box, Text, Flex } from '@chakra-ui/react';
 import { CheckCircleIcon } from '@chakra-ui/icons';
 
 export function StepConfirmation({ formData }) {
+  const hasViolation = formData.hasViolation === 'نعم';
+  
   const renderField = (label, value) => {
     if (value === null || value === undefined || value === '') return null;
     
@@ -30,7 +32,8 @@ export function StepConfirmation({ formData }) {
           معلومات الزيارة
         </Text>
         <Box>
-          {renderField('نوع المخالفة', formData.violationType)}
+          {renderField('هل يوجد مخالفة', formData.hasViolation)}
+          {hasViolation && renderField('نوع المخالفة', formData.violationType)}
           {renderField('اسم المنشأة', formData.facilityName)}
           {renderField('كود المنشأة', formData.facilityCode)}
           {renderField('الفرع', formData.branch)}
@@ -42,7 +45,7 @@ export function StepConfirmation({ formData }) {
           {renderField('حالة المنشأة', formData.facilityStatus)}
           {renderField('تحديث البيانات', formData.dataUpdated)}
           {renderField('حالة الالتزام', formData.complianceStatus)}
-          {renderField('نوع الزيارة', formData.visitType)}
+          {renderField('نوع الزيارة', formData.visitCategory)}
           {renderField('إضافة لقاعدة البيانات', formData.addedToDatabase)}
           {renderField('القطاع', formData.sector)}
           {renderField('تاريخ ووقت الزيارة', formData.visitDateTime ? new Date(formData.visitDateTime).toLocaleString('ar-SA') : '')}
@@ -83,34 +86,38 @@ export function StepConfirmation({ formData }) {
         </Box>
       </Box>
 
-      {/* Step 4 Summary */}
-      <Box border="1px" borderColor="gray.200" borderRadius="lg" p={6} bg="white" mb={6}>
-        <Text fontSize="lg" fontWeight="bold" color="gray.800" mb={4} pb={2} borderBottom="2px" borderColor="green.600">
-          المخالفات والإجراءات
-        </Text>
-        <Box>
-          {renderField('المخالفة رقم 2 - نوع', formData.violation2Type)}
-          {renderField('اللائحة التنفيذية - رقم 1', formData.regulation1)}
-          {renderField('اللائحة التنفيذية - رقم 2', formData.regulation2)}
+      {/* Step 4 Summary - Only show if there's a violation */}
+      {hasViolation && (
+        <Box border="1px" borderColor="gray.200" borderRadius="lg" p={6} bg="white" mb={6}>
+          <Text fontSize="lg" fontWeight="bold" color="gray.800" mb={4} pb={2} borderBottom="2px" borderColor="green.600">
+            المخالفات والإجراءات
+          </Text>
+          <Box>
+            {renderField('المخالفة رقم 2 - نوع', formData.violation2Type)}
+            {renderField('اللائحة التنفيذية - رقم 1', formData.regulation1)}
+            {renderField('اللائحة التنفيذية - رقم 2', formData.regulation2)}
+          </Box>
         </Box>
-      </Box>
+      )}
 
-      {/* Step 5 Summary */}
-      <Box border="1px" borderColor="gray.200" borderRadius="lg" p={6} bg="white" mb={6}>
-        <Text fontSize="lg" fontWeight="bold" color="gray.800" mb={4} pb={2} borderBottom="2px" borderColor="green.600">
-          الغرامات المالية
-        </Text>
-        <Box>
-          {renderField('قيمة المخالفة رقم 1', formData.fine1 ? `${formData.fine1} ر.س` : '')}
-          {renderField('قيمة المخالفة رقم 2', formData.fine2 ? `${formData.fine2} ر.س` : '')}
-          <Flex justify="space-between" py={3} mt={3} bg="green.50" px={3} borderRadius="md" fontWeight="bold" fontSize="lg" borderTop="2px" borderColor="green.600">
-            <Text color="gray.800">إجمالي الغرامات:</Text>
-            <Text color="green.700">
-              {(parseFloat(formData.fine1 || 0) + parseFloat(formData.fine2 || 0)).toFixed(2)} ر.س
-            </Text>
-          </Flex>
+      {/* Step 5 Summary - Only show if there's a violation */}
+      {hasViolation && (
+        <Box border="1px" borderColor="gray.200" borderRadius="lg" p={6} bg="white" mb={6}>
+          <Text fontSize="lg" fontWeight="bold" color="gray.800" mb={4} pb={2} borderBottom="2px" borderColor="green.600">
+            الغرامات المالية
+          </Text>
+          <Box>
+            {renderField('قيمة المخالفة رقم 1', formData.fine1 ? `${formData.fine1} ر.س` : '')}
+            {renderField('قيمة المخالفة رقم 2', formData.fine2 ? `${formData.fine2} ر.س` : '')}
+            <Flex justify="space-between" py={3} mt={3} bg="green.50" px={3} borderRadius="md" fontWeight="bold" fontSize="lg" borderTop="2px" borderColor="green.600">
+              <Text color="gray.800">إجمالي الغرامات:</Text>
+              <Text color="green.700">
+                {(parseFloat(formData.fine1 || 0) + parseFloat(formData.fine2 || 0)).toFixed(2)} ر.س
+              </Text>
+            </Flex>
+          </Box>
         </Box>
-      </Box>
+      )}
 
       {/* Step 6 Summary */}
       <Box border="1px" borderColor="gray.200" borderRadius="lg" p={6} bg="white">

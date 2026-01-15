@@ -1,7 +1,6 @@
 // Chakra imports
-import { ChakraProvider, Portal, useDisclosure, Spinner, Center } from '@chakra-ui/react';
+import { ChakraProvider, Portal, Spinner, Center } from '@chakra-ui/react';
 import { RtlProvider } from 'components/RTLProvider/RTLProvider';
-import Configurator from 'components/Configurator/Configurator';
 // Layout components
 import AdminNavbar from 'components/Navbars/AdminNavbar.js';
 import Sidebar from 'components/Sidebar';
@@ -10,7 +9,6 @@ import { Redirect, Route, Switch } from 'react-router-dom';
 import routes from 'routes.js';
 // Custom Chakra theme
 import theme from 'theme/theme.js';
-import FixedPlugin from '../components/FixedPlugin/FixedPlugin';
 // Custom components
 import MainPanel from '../components/Layout/MainPanel';
 import PanelContainer from '../components/Layout/PanelContainer';
@@ -81,7 +79,6 @@ export default function Dashboard(props) {
 			}
 		});
 	};
-	const { isOpen, onOpen, onClose } = useDisclosure();
 	document.documentElement.dir = 'rtl';
 	// Chakra Color Mode
 	return (
@@ -102,7 +99,6 @@ export default function Dashboard(props) {
 					}}>
 					<Portal>
 						<AdminNavbar
-							onOpen={onOpen}
 							logoText={'SAMI'}
 							brandText={getActiveRoute(routes)}
 							secondary={getActiveNavbar(routes)}
@@ -126,20 +122,6 @@ export default function Dashboard(props) {
 							</PanelContainer>
 						</PanelContent>
 					) : null}
-					<Portal>
-						<FixedPlugin secondary={getActiveNavbar(routes)} fixed={fixed} onOpen={onOpen} />
-					</Portal>
-					<Configurator
-						secondary={getActiveNavbar(routes)}
-						isOpen={isOpen}
-						onClose={onClose}
-						isChecked={fixed}
-						onSwitch={(value) => {
-							setFixed(value);
-						}}
-						onOpaque={() => setSidebarVariant('opaque')}
-						onTransparent={() => setSidebarVariant('transparent')}
-					/>
 				</MainPanel>
 			</RtlProvider>
 		</ChakraProvider>

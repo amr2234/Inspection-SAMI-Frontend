@@ -28,6 +28,7 @@ const UserForm = ({ isOpen, onClose, user, onSuccess }) => {
     nationalId: '',
     employeeId: '',
     role: 'Inspector',
+    branch: '',
     isActive: true
   });
   const [errors, setErrors] = useState({});
@@ -42,6 +43,7 @@ const UserForm = ({ isOpen, onClose, user, onSuccess }) => {
         nationalId: user.nationalId,
         employeeId: user.employeeId,
         role: user.role,
+        branch: user.branch || '',
         isActive: user.isActive
       });
     } else {
@@ -51,6 +53,7 @@ const UserForm = ({ isOpen, onClose, user, onSuccess }) => {
         nationalId: '',
         employeeId: '',
         role: 'Inspector',
+        branch: '',
         isActive: true
       });
     }
@@ -78,6 +81,11 @@ const UserForm = ({ isOpen, onClose, user, onSuccess }) => {
     
     if (!formData.employeeId) {
       newErrors.employeeId = 'رقم الموظف مطلوب';
+    }
+    
+    // Validate branch if role is BranchManager
+    if (formData.role === 'BranchManager' && !formData.branch) {
+      newErrors.branch = 'يجب اختيار الفرع';
     }
     
     setErrors(newErrors);
@@ -175,12 +183,40 @@ const UserForm = ({ isOpen, onClose, user, onSuccess }) => {
               <FormLabel>الدور الوظيفي</FormLabel>
               <Select
                 value={formData.role}
-                onChange={(e) => setFormData({ ...formData, role: e.target.value })}
+                onChange={(e) => {
+                  const newRole = e.target.value;
+                  setFormData({ 
+                    ...formData, 
+                    role: newRole,
+                    // Clear branch if not BranchManager
+                    branch: newRole === 'BranchManager' ? formData.branch : ''
+                  });
+                }}
               >
                 <option value="Inspector">مفتش</option>
+                <option value="BranchManager">مدير فرع</option>
                 <option value="SystemAdmin">مدير النظام</option>
               </Select>
             </FormControl>
+
+            {/* Show branch dropdown only if role is BranchManager */}
+            {formData.role === 'BranchManager' && (
+              <FormControl isRequired isInvalid={errors.branch}>
+                <FormLabel>الفرع</FormLabel>
+                <Select
+                  value={formData.branch}
+                  onChange={(e) => setFormData({ ...formData, branch: e.target.value })}
+                  placeholder="اختر الفرع"
+                >
+                  <option value="الفرع الرئيسي">الفرع الرئيسي</option>
+                  <option value="الفرع الشمالي">الفرع الشمالي</option>
+                  <option value="الفرع الجنوبي">الفرع الجنوبي</option>
+                  <option value="الفرع الشرقي">الفرع الشرقي</option>
+                  <option value="الفرع الغربي">الفرع الغربي</option>
+                </Select>
+                <FormErrorMessage>{errors.branch}</FormErrorMessage>
+              </FormControl>
+            )}
 
             <FormControl display="flex" alignItems="center">
               <FormLabel mb="0">نشط</FormLabel>

@@ -56,6 +56,19 @@ const VisitsTable = React.memo(({ visits, onRefresh, currentUserRole = 'Inspecto
     );
   };
 
+  const getVisitCategoryBadge = (category) => {
+    switch (category) {
+      case 'مجدولة':
+        return <Badge colorScheme="blue" fontSize="sm">مجدولة</Badge>;
+      case 'معاودة':
+        return <Badge colorScheme="orange" fontSize="sm">معاودة</Badge>;
+      case 'بلاغ':
+        return <Badge colorScheme="purple" fontSize="sm">بلاغ</Badge>;
+      default:
+        return <Badge colorScheme="gray" fontSize="sm">{category || 'غير محدد'}</Badge>;
+    }
+  };
+
   const handleView = useCallback((visitId) => {
     history.push(`/admin/visits/${visitId}`);
   }, [history]);
@@ -104,6 +117,7 @@ const VisitsTable = React.memo(({ visits, onRefresh, currentUserRole = 'Inspecto
             <Th textAlign="right" borderColor={borderColor}>التاريخ والوقت</Th>
             <Th textAlign="right" borderColor={borderColor}>اسم المنشأة</Th>
             <Th textAlign="right" borderColor={borderColor}>المنطقة/المدينة</Th>
+            <Th textAlign="center" borderColor={borderColor}>نوع الزيارة</Th>
             <Th textAlign="center" borderColor={borderColor}>حالة الامتثال</Th>
             <Th textAlign="center" borderColor={borderColor}>المخالفات</Th>
             <Th textAlign="center" borderColor={borderColor}>العينات</Th>
@@ -146,6 +160,9 @@ const VisitsTable = React.memo(({ visits, onRefresh, currentUserRole = 'Inspecto
                 <Text fontSize="xs" color="gray.500">
                   {visit.city}
                 </Text>
+              </Td>
+              <Td textAlign="center" borderColor={borderColor}>
+                {getVisitCategoryBadge(visit.visitCategory)}
               </Td>
               <Td textAlign="center" borderColor={borderColor}>
                 {getComplianceStatusBadge(visit.complianceStatus)}

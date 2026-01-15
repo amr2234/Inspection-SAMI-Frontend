@@ -61,10 +61,21 @@ export const inputStyles = {
 					border: '1px solid',
 					borderColor: mode('#808080', '#346860')(props),
 					color: mode('#214C59', '#FFFFFF')(props),
+					paddingInlineEnd: '0.75rem',
+					_placeholder: {
+						color: '#808080'
+					},
 					_focus: {
 						borderColor: '#62AD45',
 						boxShadow: '0 0 0 1px #62AD45'
+					},
+					'& option': {
+						paddingInlineEnd: '0.75rem',
+						paddingInlineStart: '0.75rem'
 					}
+				},
+				icon: {
+					display: 'none'
 				}
 			})
 		}

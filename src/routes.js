@@ -117,7 +117,7 @@ var dashRoutes = [
     component: InspectionForm,
     layout: "/admin",
     isExternal: true, // Mark as external to open in new tab
-    externalPath: "/#/form/inspection"
+    externalPath: "/form/inspection"
   },
   // Hidden routes (not in sidebar)
   {

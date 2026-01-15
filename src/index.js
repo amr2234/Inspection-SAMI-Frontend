@@ -17,7 +17,7 @@
 */
 import React from "react";
 import ReactDOM from "react-dom";
-import { HashRouter, Route, Switch, Redirect } from "react-router-dom";
+import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 import './i18n'; // Import i18n configuration
 import ErrorBoundary from 'components/ErrorBoundary/ErrorBoundary';
 
@@ -27,14 +27,14 @@ import FormLayout from "layouts/Form.js";
 
 ReactDOM.render(
   <ErrorBoundary>
-    <HashRouter>
+    <BrowserRouter>
       <Switch>
         <Route path={`/auth`} component={AuthLayout} />
         <Route path={`/form`} component={FormLayout} />
         <Route path={`/admin`} component={RTLLayout} />
         <Redirect from={`/`} to="/admin/dashboard" />
       </Switch>
-    </HashRouter>
+    </BrowserRouter>
   </ErrorBoundary>,
   document.getElementById("root")
 );

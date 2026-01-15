@@ -2,7 +2,7 @@
 	"name": "sami-dashboard-form",
 	"version": "2.0.2",
 	"private": true,
-	"homepage": "https://demos.creative-tim.com/inspection-form/#/",
+	"homepage": ".",
 	"dependencies": {
 		"@chakra-ui/icons": "^1.1.5",
 		"@chakra-ui/react": "1.8.8",
@@ -75,7 +75,7 @@
 		"react-leaflet": "^3.2.5",
 		"react-resizable-panels": "^4.4.0",
 		"react-router-dom": "5.2.1",
-		"react-scripts": "5.0.0",
+		"react-scripts": "^5.0.1",
 		"react-swipeable-views": "0.14.0",
 		"react-table": "7.7.0",
 		"react-tagsinput": "3.19.0",

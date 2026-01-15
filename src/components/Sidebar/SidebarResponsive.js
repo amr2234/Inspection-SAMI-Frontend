@@ -151,7 +151,7 @@ const SidebarResponsive = React.memo((props) => {
     var brand = (
       <Box pt={"35px"} mb="8px">
         <Link
-          href={`${process.env.PUBLIC_URL}/#/`}
+          href={`${process.env.PUBLIC_URL}/`}
           target="_blank"
           display="flex"
           lineHeight="100%"
